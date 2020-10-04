@@ -8,7 +8,7 @@ if (isset($_POST["submit"])) {
 	$habit_title = $_POST["habit_title"];
 
 	//verify its not empty
-	if (!empty($habit_title){
+	if (!empty($habit_title)){
 
 		#Saving new habits into a text file
 		$habit = str_replace(' ', '_', $habit_title);
