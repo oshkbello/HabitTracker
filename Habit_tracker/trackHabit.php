@@ -77,7 +77,7 @@
 			<button class="button butnround" type="submit"> Tap </button>
 		</form>
 		<div>
-			<a href="habitTracker.php"><< Back to my List </a>
+			<a href="habitTracker_home.php"><< Back to my List </a>
 		</div>
 	</div>
 </div>
