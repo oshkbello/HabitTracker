@@ -6,16 +6,17 @@
 			<p>
 				<?php 
 				echo "Current Habit: ";
-				$habit = $_GET['habit'];//'Wake_Up_5_am'; //variable for the file name we are working with
+				$habit = (isset($_POST['habit'])) ? $_POST['habit'] : $_GET['habit'];//'Wake_Up_5_am'; //variable for the file name we are working with
 				
 				//the location to the file
 				$fileName = "./NewHabits/".$habit; 
-				//current time
+			
 				$currentDateTime = strtotime(date('Y-m-d H:i:s'));
 				
 
 				if(!isset($_POST['streak']))
 				{
+					$habit = $_GET['habit'];
 					//reading last file entry and saving into an arraay of string
 					$file = file($fileName); 
 					$pieces = $file[count($file) - 1];
@@ -72,7 +73,11 @@
 		</div>
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 			<input type="hidden" name="streak" id="streak" value="<?php echo $streak;?>"/>
+			<input type="hidden" name="habit" id="habit" value="<?php echo $habit;?>"/>
 			<button class="button butnround" type="submit"> Tap </button>
 		</form>
+		<div>
+			<a href="habitTracker.php"><< Back to my List </a>
+		</div>
 	</div>
 </div>
