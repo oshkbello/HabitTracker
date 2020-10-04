@@ -23,7 +23,7 @@ if (isset($_POST["submit"])) {
 			echo "Cannot create file (".basename($newFileContent.")");
 		}
 
-		header("Location: habitTracker.php");
+		header("Location: habitTracker_home.php");
 
 	}
 
