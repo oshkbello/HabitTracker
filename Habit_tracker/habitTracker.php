@@ -1,3 +1,4 @@
+<?php include('all_style.css');?>
 <div>
 	<h3> Welcome to habit Tracker </h3>
 	<form action="create_habit_frontend.php" method="post">
@@ -9,7 +10,7 @@
 						$dir = "./NewHabits/";
 						$file = array_diff(scandir($dir), array('.', '..'));
 						if (empty($file)){
-							echo "<i> You do not have any habits you are tracking. To create use the button below! </i>";
+							echo "<p><i> You do not have any habits you are tracking. To create use the button below! </i></p";
 						}
 						echo "<ul>";
 						foreach ($file as $value)
