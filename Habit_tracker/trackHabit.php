@@ -6,58 +6,59 @@
 			<p>
 				<?php 
 				echo "Current Habit: ";
-				$habit = (isset($_POST['habit'])) ? $_POST['habit'] : $_GET['habit'];//'Wake_Up_5_am'; //variable for the file name we are working with
+				//set the habit name you are working with
+				$habit = (isset($_POST['habit'])) ? $_POST['habit'] : $_GET['habit'];
 				
-				//the location to the file
+				//file path
 				$fileName = "./NewHabits/".$habit; 
-			
+				
 				$currentDateTime = strtotime(date('Y-m-d H:i:s'));
 				
+				//reading last record entry and saving into an arraay of string
+				$file = file($fileName); 
+				$pieces = $file[count($file) - 1]; //starts reading textfile from bottom
+				$dt = explode(" ", $pieces); 
 
-				if(!isset($_POST['streak']))
-				{
-					$habit = $_GET['habit'];
-					//reading last file entry and saving into an arraay of string
-					$file = file($fileName); 
-					$pieces = $file[count($file) - 1];
-					$dt = explode(" ", $pieces); 
-
-					//check if habit was done within last 24hrs. Calculate the dateerence in hours
-					$date = abs($currentDateTime - $dt[0]);
+				//check if habit was done within last 24hrs. Calculate the dateerence in hours
+				$date = abs($currentDateTime - $dt[0]);
 					
-					//calculate years
-					$years = floor($date / (365*60*60*24));  
+				//calculate years
+				$years = floor($date / (365*60*60*24));  
   					
-  					//calculate months
-					$months = floor(($date - $years * 365*60*60*24) / (30*60*60*24));  
+  				//calculate months
+				$months = floor(($date - $years * 365*60*60*24) / (30*60*60*24));  
   					
-  					//calculate days 
-					$days = floor(($date - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24)); 
+  				//calculate days 
+				$days = floor(($date - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24)); 
 
-					//calculate hourse
-					$hours = floor(($date - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24) 
-                                   / (60*60));  
+				//calculate hours
+				$hours = floor(($date - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24) 
+                            / (60*60));  
 
-					if ($dt[0] == 0){
-						$streak = 0;
-					}elseif ($dt[0] > 0 && $hours > 24) {
-						# code...
-						$streakCount = PHP_EOL . "$currentDateTime * $streak"; //to force a new line
-						$streak = 0;
-					}else{
-						$streak = $dt[2];
-					}
-
+				if ($dt[0] == 0){ //when no record is created
+					$streak = 0;
+				}elseif ($dt[0] > 0 && $hours >= 48) { //when a day is skipped, the record resets to 0
+					# code...
+					//$streakCount = PHP_EOL . "$currentDateTime * $streak";
+					$streak = 0;
 				}else{
-					//increment streak by 1
-					$streak = $_POST['streak'] + 1;
-					//Create a record of consequtive streak
-					$streakCount = PHP_EOL . "$currentDateTime * $streak"; //to force a new line
-					
-					if (file_put_contents($fileName, $streakCount, FILE_APPEND)){
-						echo " ";
+					$streak = $dt[2]; //when there is an active streak 
+				}
+
+				if (isset($_POST['streak'])){
+					//streak recording
+					if ($hours <= 24){ //To avoid multiple record entries in a single day
+						$streak = $dt[2];
 					}else{
-						echo " ";
+						$streak = $_POST['streak'] + 1;
+						//Create a record of consequtive streak
+						$streakCount = PHP_EOL . "$currentDateTime * $streak"; //to force a new line
+					
+						if (file_put_contents($fileName, $streakCount, FILE_APPEND)){
+							echo " ";
+						}else{
+							echo " ";
+						}
 					}
 				}
 				
@@ -65,7 +66,9 @@
 				?>
 			</p>
 		</h>
-		<p>In order to track today's fulfilment of your daily habit, you have to tap on the big button below. If you do not tap the button atleast once in a day, you will loose your streak and start all over again. Your goal is to create a 21 day streak of daily habit.</p>
+		<p>In order to track today's fulfilment of your daily habit, you have to tap on the big green button below. 
+		If you do not tap the button atleast once in 24hrs, you will loose your streak and start all over again. Your goal is to create a 21 day streak of daily habit.
+		</p>
 	</div>
 	<div style="width:300px; margin:0 auto;">
 		<div style="margin:0 auto;">
@@ -77,7 +80,10 @@
 			<button class="button butnround" type="submit"> Tap </button>
 		</form>
 		<div>
-			<a href="habitTracker_home.php"><< Back to my List </a>
+			<a href="habitTracker.php"><< Back to my List </a>
+		</div>
+		<div>
+			<p><i>NOTE:</i> If you Tap twice in a single day, only the first Tap will be recorded</p>
 		</div>
 	</div>
 </div>
